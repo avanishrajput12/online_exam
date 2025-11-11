@@ -9,7 +9,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/students', [AdminController::class, 'allData'])->name('students');
 
     Route::view('/results', 'admin.result')->name('results');
-    Route::view('/questions', 'admin.questions')->name('questions');
+    Route::get('/questions', [AdminController::class, 'allcategory'])->name('questions');
     Route::view('/settings', 'admin.settings')->name('settings');
 
 
