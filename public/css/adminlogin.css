@@ -1,0 +1,236 @@
+/* ========== GLOBAL STYLES ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #004aad, #0077ff, #a8c0ff);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+  overflow: hidden;
+}
+
+/* Floating circles background */
+body::before, body::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+body::before {
+  width: 350px;
+  height: 350px;
+  top: 10%;
+  left: 15%;
+  background: #0056b3;
+}
+
+body::after {
+  width: 400px;
+  height: 400px;
+  bottom: 10%;
+  right: 10%;
+  background: #009dff;
+}
+
+/* ========== LOGIN CONTAINER ========== */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.login-card {
+  width: 360px;
+  padding: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  color: #fff;
+  transition: 0.3s;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+}
+
+/* ========== HEADER ========== */
+.login-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-header h2 {
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.login-header p {
+  font-size: 0.9rem;
+  color: #d0e1ff;
+}
+
+/* ========== INPUTS ========== */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.input-wrapper label {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: #e0e0e0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+
+.input-wrapper input:focus + label,
+.input-wrapper input:valid + label {
+  top: 6px;
+  font-size: 0.75rem;
+  color: #a8c0ff;
+}
+
+.focus-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #a8c0ff;
+  transition: 0.3s;
+}
+
+.input-wrapper input:focus ~ .focus-border {
+  width: 100%;
+}
+
+/* Password toggle */
+.password-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.eye-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background: url('https://cdn-icons-png.flaticon.com/512/159/159604.png') no-repeat center;
+  background-size: contain;
+  filter: invert(1);
+}
+
+.password-toggle.active .eye-icon {
+  background: url('https://cdn-icons-png.flaticon.com/512/709/709612.png') no-repeat center;
+  background-size: contain;
+}
+
+/* ========== REMEMBER ME ========== */
+.remember-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+.remember-wrapper input {
+  margin-right: 8px;
+}
+
+/* ========== BUTTON ========== */
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0077ff, #0056b3);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #0056b3, #0077ff);
+}
+
+.btn-loader {
+  display: none;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@keyframes spin {
+  100% {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
+/* ========== ERROR MESSAGE ========== */
+.error-message {
+  color: #ff9a9a;
+  font-size: 0.8rem;
+  margin-top: 3px;
+  display: block;
+  min-height: 14px;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
