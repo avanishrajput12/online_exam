@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Admin Dashboard')</title>
 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <!-- Bootstrap + Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -117,21 +119,28 @@
   <div class="sidebar" id="sidebar">
     <h4>Admin Panel</h4>
     <nav class="nav flex-column">
-      <a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+
+      <a href="{{ url('admin/dashboard') }}" class="nav-link">
         <i class="fa-solid fa-chart-line"></i> Dashboard
       </a>
-      <a href="{{ route('students') }}" class="nav-link {{ request()->is('students') ? 'active' : '' }}">
+
+      <a href="{{ url('admin/students') }}" class="nav-link">
         <i class="fa-solid fa-users"></i> Students
       </a>
-      <a href="{{ route('results') }}" class="nav-link {{ request()->is('results') ? 'active' : '' }}">
+
+      <a href="{{ url('admin/results') }}" class="nav-link">
         <i class="fa-solid fa-trophy"></i> Results
       </a>
-      <a href="{{ route('questions') }}" class="nav-link {{ request()->is('questions') ? 'active' : '' }}">
+
+      <!-- ⭐ FIXED QUESTIONS LINK -->
+      <a href="{{ url('admin/questions') }}" class="nav-link">
         <i class="fa-solid fa-question"></i> Questions
       </a>
-      <a href="{{ route('settings') }}" class="nav-link {{ request()->is('settings') ? 'active' : '' }}">
+
+      <a href="{{ url('admin/settings') }}" class="nav-link">
         <i class="fa-solid fa-gear"></i> Settings
       </a>
+
     </nav>
   </div>
 
@@ -156,30 +165,34 @@
 </div>
 
 
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    $('#toggleSidebar').on('click', function() {
-      $('#sidebar').toggleClass('active');
-    });
-  </script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
+<script>
+  $('#toggleSidebar').on('click', function() {
+    $('#sidebar').toggleClass('active');
+  });
+</script>
+
+<script>
 $(document).ready(function() {
-
 
   $('.sidebar .nav-link').on('click', function(e) {
     e.preventDefault();
-    const url = $(this).attr('href');  
 
+    const url = $(this).attr('href');
 
     $('.sidebar .nav-link').removeClass('active');
     $(this).addClass('active');
 
-
     $('#loading-spinner').show();
-    $('#ajax-content').html('<div class="text-center py-5 text-muted"><div class="spinner-border text-primary"></div><p class="mt-2">Loading...</p></div>');
 
+    $('#ajax-content').html(`
+      <div class="text-center py-5 text-muted">
+        <div class="spinner-border text-primary"></div>
+        <p class="mt-2">Loading...</p>
+      </div>
+    `);
 
     $.ajax({
       url: url,
@@ -188,12 +201,24 @@ $(document).ready(function() {
         $('#ajax-content').html(response);
       },
       error: function() {
-        $('#ajax-content').html('<div class="alert alert-danger m-4">⚠️ Failed to load content.</div>');
+        $('#ajax-content').html(`
+          <div class="alert alert-danger m-4">
+            ⚠️ Failed to load content.
+          </div>
+        `);
       }
     });
   });
 
 });
+</script>
+
+<script>
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 </script>
 
 </body>
