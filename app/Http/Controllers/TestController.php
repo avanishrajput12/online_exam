@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Test;
 use App\Models\TestQuestion;
 use App\Models\Questions;
-use App\Models\User;
+use App\Models\Students;
+
+use App\Models\TestAssignment;
+
 use Illuminate\Http\Request;
 
 class TestController extends Controller
@@ -30,14 +33,17 @@ class TestController extends Controller
         $request->validate([
             "title" => "required",
             "categories" => "required|array",
-            "counts" => "required|array"
+            "counts" => "required|array",
+            "duration" => "required|integer|min:1"
+
         ]);
 
         $total_questions = array_sum($request->counts);
 
         $test = Test::create([
             "title" => $request->title,
-            "total_questions" => $total_questions
+            "total_questions" => $total_questions,
+            "duration" => $request->duration
         ]);
 
         // SAVE ALL CATEGORY QUESTIONS
@@ -99,19 +105,24 @@ class TestController extends Controller
         PAGE: Assign Test Modal + Assign User
     ----------------------------------------------------- */
     public function assignTest(Request $request)
-    {
-        $request->validate([
-            "test_id" => "required",
-            "user_id" => "required",
-        ]);
+{
+    $request->validate([
+        "test_id" => "required|exists:tests,id",
+        "student_id" => "required|exists:students,id",
+    ]);
 
-        // Example assign — you can save in DB table test_assignments
-        // For now simply respond
-        return response()->json([
-            "success" => true,
-            "msg" => "Test Assigned Successfully!"
-        ]);
-    }
+    TestAssignment::create([
+        'test_id' => $request->test_id,
+        'student_id' => $request->student_id,
+        'status' => 'pending',
+        'assigned_at' => now()
+    ]);
+
+    return response()->json([
+        "success" => true,
+        "msg" => "Test Assigned Successfully!"
+    ]);
+}
 
 
 
@@ -128,4 +139,28 @@ class TestController extends Controller
             "success" => true
         ]);
     }
+
+    public function assignModal($id)
+{
+    $test = Test::find($id);
+
+    if(!$test){
+        return response("<h4>Invalid Test ID</h4>", 404);
+    }
+
+    $users = Students::all(); // all students
+
+    return view('admin.partials.assign_test_modal', compact('test','users'));
+}
+
+public function previewTest($id)
+{
+    $test = Test::with(['testQuestions.question'])->findOrFail($id);
+    dd($test);
+
+    return view('student.test_preview', compact('test'));
+}
+
+
+
 }

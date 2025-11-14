@@ -54,8 +54,15 @@
 </div>
 
 <script>
-// ⭐ Add another category row dynamically
-$(document).on("click", "#add-category", function () {
+
+/*  
+===========================================================
+   FIXED VERSION — NO MULTIPLE EVENT BINDING ANYMORE
+===========================================================
+*/
+
+// ⭐ FIX: Add Category (Remove duplicate bindings)
+$(document).off("click", "#add-category").on("click", "#add-category", function () {
 
     let row = `
     <div class="row mb-2 category-row">
@@ -68,10 +75,16 @@ $(document).on("click", "#add-category", function () {
                 @endforeach
             </select>
         </div>
+     
+
 
         <div class="col-md-4">
             <input type="number" class="form-control" name="counts[]" min="1" required>
         </div>
+           <div class="mb-3">
+        <label class="form-label">Test Duration (Minutes)</label>
+            <input type="number" name="duration" class="form-control" required min="1" placeholder="Enter duration in minutes">
+      </div>
 
         <div class="col-md-2 d-flex align-items-end">
             <button type="button" class="btn btn-danger btn-remove">X</button>
@@ -83,13 +96,15 @@ $(document).on("click", "#add-category", function () {
     $("#category-wrapper").append(row);
 });
 
-// ⭐ Remove category row
-$(document).on("click", ".btn-remove", function () {
+
+// ⭐ FIX: Remove category row (Remove duplicate bindings)
+$(document).off("click", ".btn-remove").on("click", ".btn-remove", function () {
     $(this).closest('.category-row').remove();
 });
 
-// ⭐ Submit Test
-$("#createTestForm").on("submit", function(e){
+
+// ⭐ Submit Test (no need to fix)
+$(document).off("submit", "#createTestForm").on("submit", "#createTestForm", function(e){
     e.preventDefault();
 
     $("#submitTestBtn").prop("disabled", true).text("Saving...");
@@ -114,4 +129,5 @@ $("#createTestForm").on("submit", function(e){
     });
 
 });
+
 </script>

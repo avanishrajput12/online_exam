@@ -8,10 +8,16 @@
 </head>
 <body>
 
-
-
     <div class="login-container">
         <div class="login-card">
+
+            <!-- ⭐ Logo Block ⭐ -->
+            <div class="text-center" style="margin-bottom: 10px;">
+                <img src="{{ asset('images/logo.png') }}" 
+                     alt="Logo" 
+                     style="width:60px; height:60px; border-radius:50%;">
+            </div>
+
             <div class="login-header">
                 <h2>ADMIN LOGIN</h2>
                 <p>Log in to your account</p>
@@ -55,10 +61,10 @@
                 </button>
             </form>
 
-
         </div>
     </div>
 
-   <script src="{{ asset('js/adminlogin.js') }}"></script>
+    <script src="{{ asset('js/adminlogin.js') }}"></script>
+
 </body>
 </html>
