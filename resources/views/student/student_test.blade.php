@@ -1,57 +1,115 @@
-<h3>{{ $test->title }}</h3>
-<p><b>Duration:</b> {{ $test->duration }} Minutes</p>
-<p><b>Total Questions:</b> {{ $test->testQuestions->count() }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Test</title>
 
-<button id="startTest" class="btn btn-primary">Start Test</button>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<div id="testArea" style="display:none">
+    <style>
+        body {
+            background: #f2f5f7;
+        }
+        .question-card {
+            border-left: 5px solid #0d6efd;
+            background: #fff;
+        }
+        .timer-box {
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            text-align: right;
+        }
+        .option-label {
+            cursor: pointer;
+            padding: 7px 12px;
+            border-radius: 8px;
+        }
+        .option-input:checked + .option-label {
+            background: #cfe2ff;
+            border: 1px solid #0d6efd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="p-4">
 
-    <h4>Time Left: <span id="timer"></span></h4>
+<div class="container">
 
-    <form id="submitTestForm">
+    <h2 class="mb-2">{{ $test->title }}</h2>
+    <p class="text-muted">Total Questions: {{ $test->testQuestions->count() }}</p>
+
+    <div class="timer-box mb-3">
+        Time Left: <span id="time">{{ $test->duration }}:00</span>
+    </div>
+
+    <form method="POST" action="{{ route('student.test.submit', $test->id) }}" id="testForm">
         @csrf
 
-        @foreach($test->testQuestions as $tq)
-        <p><b>{{ $loop->iteration }} . {{ $tq->question->question }}</b></p>
+        @foreach($test->testQuestions as $index => $tq)
+            <div class="card p-3 mb-3 question-card">
 
-        <input type="radio" name="q{{ $tq->id }}" value="{{ $tq->question->op_1 }}"> {{ $tq->question->op_1 }} <br>
-        <input type="radio" name="q{{ $tq->id }}" value="{{ $tq->question->op_2 }}"> {{ $tq->question->op_2 }} <br>
-        <input type="radio" name="q{{ $tq->id }}" value="{{ $tq->question->op_3 }}"> {{ $tq->question->op_3 }} <br>
-        <input type="radio" name="q{{ $tq->id }}" value="{{ $tq->question->op_4 }}"> {{ $tq->question->op_4 }} <br>
-        <hr>
+                <h5>Q{{ $index+1 }}. {{ $tq->question->question }}</h5>
+
+                <div class="mt-2">
+                    <input type="radio" class="option-input d-none"
+                           name="ans[{{ $tq->question->id }}]" id="q{{ $tq->id }}_1" value="op_1">
+                    <label for="q{{ $tq->id }}_1" class="option-label d-block">
+                        A) {{ $tq->question->op_1 }}
+                    </label>
+
+                    <input type="radio" class="option-input d-none"
+                           name="ans[{{ $tq->question->id }}]" id="q{{ $tq->id }}_2" value="op_2">
+                    <label for="q{{ $tq->id }}_2" class="option-label d-block">
+                        B) {{ $tq->question->op_2 }}
+                    </label>
+
+                    <input type="radio" class="option-input d-none"
+                           name="ans[{{ $tq->question->id }}]" id="q{{ $tq->id }}_3" value="op_3">
+                    <label for="q{{ $tq->id }}_3" class="option-label d-block">
+                        C) {{ $tq->question->op_3 }}
+                    </label>
+
+                    <input type="radio" class="option-input d-none"
+                           name="ans[{{ $tq->question->id }}]" id="q{{ $tq->id }}_4" value="op_4">
+                    <label for="q{{ $tq->id }}_4" class="option-label d-block">
+                        D) {{ $tq->question->op_4 }}
+                    </label>
+                </div>
+
+            </div>
         @endforeach
 
-        <button class="btn btn-success">Submit Test</button>
-
+        <button class="btn btn-success w-100 mt-4" id="submitBtn">Submit Test</button>
     </form>
 
 </div>
 
 <script>
-$("#startTest").on("click", function(){
+/* -------------------------------
+    TIMER LOGIC
+----------------------------------*/
+let totalSeconds = {{ $test->duration }} * 60;
 
-    $("#testArea").show();
-    $(this).hide();
+let interval = setInterval(() => {
 
-    let minutes = {{ $test->duration }};
-    let seconds = minutes * 60;
+    let min = Math.floor(totalSeconds / 60);
+    let sec = totalSeconds % 60;
 
-    let timer = setInterval(() => {
+    document.getElementById("time").innerHTML =
+        (min < 10 ? "0"+min : min) + ":" + (sec < 10 ? "0"+sec : sec);
 
-        let m = Math.floor(seconds / 60);
-        let s = seconds % 60;
+    if (totalSeconds <= 0) {
+        clearInterval(interval);
+        alert("Time Over! Submitting test...");
+        document.getElementById("testForm").submit();
+    }
 
-        document.getElementById("timer").innerHTML = `${m}:${s}`;
+    totalSeconds--;
 
-        seconds--;
-
-        if(seconds <= 0){
-            clearInterval(timer);
-            alert("⏳ Time Over! Test Auto Submitted");
-            $("#submitTestForm").submit();
-        }
-
-    }, 1000);
-
-});
+}, 1000);
 </script>
+
+</body>
+</html>

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 // Default Landing
 Route::view('/', 'layouts.admin');
@@ -89,4 +90,34 @@ Route::post('/student/test/submit/{id}', [TestController::class, 'studentSubmitT
 
      // TEMPORARY — Test Preview Without Login
 Route::get('/preview/test/{id}', [TestController::class, 'previewTest']);
+
+
+
+
+// User Login Page
+Route::get('/user/login', function () {
+    return view('login.userlogin');
+})->name('user.login');
+
+// Handle login
+Route::post('/user/login', [UserController::class, 'login'])->name('user.login.submit');
+
+// USER DASHBOARD - Must be logged in
+Route::middleware('user.auth')->group(function () {
+
+    // Show profile update page
+    Route::get('/user/profile', [UserController::class, 'profilePage'])->name('user.profile');
+
+    // Save profile
+    Route::post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
+
+    // Student test start
+    Route::get('/student/test/start/{id}', [TestController::class, 'studentStartTest'])
+        ->name('student.test.start');
+
+    // Submit answers
+    Route::post('/student/test/submit/{id}', [TestController::class, 'studentSubmitTest'])
+        ->name('student.test.submit');
+});
+
 

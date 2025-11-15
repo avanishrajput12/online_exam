@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    /* -----------------------------------------------------
-        PAGE: Create Test Page (Multi Category)
-    ----------------------------------------------------- */
+   
     public function createTestPage()
     {
         return view("admin.partials.create_test", [
@@ -148,17 +146,18 @@ class TestController extends Controller
         return response("<h4>Invalid Test ID</h4>", 404);
     }
 
-    $users = Students::all(); // all students
+    $users = Students::all();
 
     return view('admin.partials.assign_test_modal', compact('test','users'));
 }
 
-public function previewTest($id)
+
+
+public function studentStartTest($id)
 {
     $test = Test::with(['testQuestions.question'])->findOrFail($id);
-    dd($test);
 
-    return view('student.test_preview', compact('test'));
+    return view('student.student_test', compact('test'));
 }
 
 
