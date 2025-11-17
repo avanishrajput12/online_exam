@@ -14,6 +14,5 @@
     </ul>
 
     <p><b>Correct:</b> {{ $tq->question->correct }}</p>
-
     <hr>
 @endforeach

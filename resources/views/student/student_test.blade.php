@@ -83,9 +83,7 @@
 
         <button class="btn btn-success w-100 mt-4" id="submitBtn">Submit Test</button>
     </form>
-
 </div>
-
 <script>
 /* -------------------------------
     TIMER LOGIC
@@ -93,21 +91,16 @@
 let totalSeconds = {{ $test->duration }} * 60;
 
 let interval = setInterval(() => {
-
     let min = Math.floor(totalSeconds / 60);
     let sec = totalSeconds % 60;
-
     document.getElementById("time").innerHTML =
         (min < 10 ? "0"+min : min) + ":" + (sec < 10 ? "0"+sec : sec);
-
     if (totalSeconds <= 0) {
         clearInterval(interval);
         alert("Time Over! Submitting test...");
         document.getElementById("testForm").submit();
     }
-
     totalSeconds--;
-
 }, 1000);
 </script>
 

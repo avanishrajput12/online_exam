@@ -15,3 +15,10 @@ class TestQuestion extends Model
         return $this->belongsTo(Questions::class, 'question_id');
     }
 }
+
+
+
+
+
+
+
