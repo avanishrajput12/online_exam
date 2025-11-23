@@ -54,14 +54,6 @@
 </div>
 
 <script>
-
-/*  
-===========================================================
-   FIXED VERSION — NO MULTIPLE EVENT BINDING ANYMORE
-===========================================================
-*/
-
-// ⭐ FIX: Add Category (Remove duplicate bindings)
 $(document).off("click", "#add-category").on("click", "#add-category", function () {
 
     let row = `

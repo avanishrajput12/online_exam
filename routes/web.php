@@ -7,13 +7,11 @@ use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
-// Default Landing
 Route::view('/', 'layouts.admin');
 
 
-// ===========================
 //      ADMIN ROUTES
-// ===========================
+
 Route::prefix('admin')->group(function () {
 
     // Dashboard
@@ -28,9 +26,9 @@ Route::prefix('admin')->group(function () {
     Route::view('/settings', 'admin.settings')->name('settings');
 
 
-    // ===========================
+
     //      CATEGORY ROUTES
-    // ===========================
+  
     Route::get('/questions', [CategoryController::class, 'allcateory'])->name('questions');
     Route::post('/category/store', [CategoryController::class, 'storeCategory'])->name('category.store');
     Route::get('/category/{id}', [CategoryController::class, 'getCategory'])->name('category.get');
@@ -38,9 +36,9 @@ Route::prefix('admin')->group(function () {
     Route::delete('/category/delete/{id}', [CategoryController::class, 'deleteCategory'])->name('category.delete');
 
 
-    // ===========================
+   
     //      QUESTION ROUTES
-    // ===========================
+   
     Route::get('/questions/list/{category_id}', [QuestionController::class, 'index'])->name('questions.list');
     Route::post('/questions/store', [QuestionController::class, 'store'])->name('questions.store');
     Route::get('/questions/get/{id}', [QuestionController::class, 'getQuestion'])->name('questions.get');
@@ -48,9 +46,9 @@ Route::prefix('admin')->group(function () {
     Route::delete('/questions/delete/{id}', [QuestionController::class, 'delete'])->name('questions.delete');
 
 
-    // ===========================
-    //      TEST ROUTES
-    // ===========================
+    
+    //      TEST ROUTES 
+    
     Route::get('/test/create-page', [TestController::class, 'createTestPage'])->name('generate.test');
     Route::post('/test/create', [TestController::class, 'createTest'])->name('test.create');
     Route::get('/tests', [TestController::class, 'allTests'])->name('tests.all');

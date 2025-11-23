@@ -18,7 +18,7 @@ return new class extends Migration
         $table->unsignedBigInteger('student_id');
 
         $table->timestamp('assigned_at')->nullable();
-        $table->string('status')->default('pending'); // pending / completed
+        $table->string('status')->default('pending'); 
         $table->integer('score')->nullable();
 
         $table->timestamps();

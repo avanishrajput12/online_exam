@@ -85,9 +85,8 @@
     </form>
 </div>
 <script>
-/* -------------------------------
-    TIMER LOGIC
-----------------------------------*/
+
+
 let totalSeconds = {{ $test->duration }} * 60;
 
 let interval = setInterval(() => {
