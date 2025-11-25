@@ -10,18 +10,15 @@ use App\Http\Controllers\UserController;
 Route::view('/', 'layouts.admin');
 
 
-//      ADMIN ROUTES
 
 Route::prefix('admin')->group(function () {
 
-    // Dashboard
     Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
 
-    // Students
     Route::get('/students', [AdminController::class, 'allData'])->name('students');
     Route::post('/add-student', [AdminController::class, 'AddStudent'])->name('addstu');
 
-    // Results & Settings
+
    Route::get('/results', [AdminController::class, 'index'])->name('results');
 
 
@@ -87,18 +84,16 @@ Route::post('/student/test/submit/{id}', [TestController::class, 'studentSubmitT
 
 
 
-     // TEMPORARY — Test Preview Without Login
 Route::get('/preview/test/{id}', [TestController::class, 'previewTest']);
 
 
 
 
-// User Login Page
+
 Route::get('/user/login', function () {
     return view('login.userlogin');
 })->name('user.login');
 
-// Handle login
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login.submit');
     Route::get('/user/profile', [UserController::class, 'profilePage'])->name('user.profile');
     Route::post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
