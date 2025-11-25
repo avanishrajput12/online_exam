@@ -1,30 +1,47 @@
+@extends('layouts.admin')
+
+@section('content')
+
 <div class="card shadow-sm p-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5>Exam Results</h5>
-    <button class="btn btn-success">
-      <i class="fa-solid fa-file-export me-1"></i> Export Results
-    </button>
+
+  <h4 class="mb-3">All Test Results</h4>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover align-middle">
+      <thead class="table-primary">
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Email</th>
+          <th>Test</th>
+          <th>Score</th>
+          <th>Percentage</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @foreach($results as $i => $res)
+        <tr>
+          <td>{{ $i+1 }}</td>
+          <td>{{ $res->student->name ?? 'Unknown' }}</td>
+          <td>{{ $res->student->email ?? '-' }}</td>
+          <td>{{ $res->test->title }}</td>
+          <td>{{ $res->score }}/{{ $res->total_questions }}</td>
+          <td>{{ number_format($res->percentage,2) }}%</td>
+          <td>
+            @if($res->percentage >= 40)
+              <span class="badge bg-success">Pass</span>
+            @else
+              <span class="badge bg-danger">Fail</span>
+            @endif
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
   </div>
-  <table class="table table-striped">
-    <thead class="table-primary">
-      <tr>
-        <th>#</th>
-        <th>Student</th>
-        <th>Email</th>
-        <th>Quiz</th>
-        <th>Score</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Avanish Rajput</td>
-        <td>avanish@example.com</td>
-        <td>HTML Basics</td>
-        <td>85%</td>
-        <td><span class="badge bg-success">Pass</span></td>
-      </tr>
-    </tbody>
-  </table>
+
 </div>
+
+@endsection

@@ -22,12 +22,13 @@ Route::prefix('admin')->group(function () {
     Route::post('/add-student', [AdminController::class, 'AddStudent'])->name('addstu');
 
     // Results & Settings
-    Route::view('/results', 'admin.result')->name('results');
+   Route::get('/results', [AdminController::class, 'index'])->name('results');
+
+
     Route::view('/settings', 'admin.settings')->name('settings');
 
 
 
-    //      CATEGORY ROUTES
   
     Route::get('/questions', [CategoryController::class, 'allcateory'])->name('questions');
     Route::post('/category/store', [CategoryController::class, 'storeCategory'])->name('category.store');
@@ -37,7 +38,7 @@ Route::prefix('admin')->group(function () {
 
 
    
-    //      QUESTION ROUTES
+
    
     Route::get('/questions/list/{category_id}', [QuestionController::class, 'index'])->name('questions.list');
     Route::post('/questions/store', [QuestionController::class, 'store'])->name('questions.store');
@@ -46,14 +47,14 @@ Route::prefix('admin')->group(function () {
     Route::delete('/questions/delete/{id}', [QuestionController::class, 'delete'])->name('questions.delete');
 
 
-    
-    //      TEST ROUTES 
+
     
     Route::get('/test/create-page', [TestController::class, 'createTestPage'])->name('generate.test');
     Route::post('/test/create', [TestController::class, 'createTest'])->name('test.create');
     Route::get('/tests', [TestController::class, 'allTests'])->name('tests.all');
+     
 
-    // View / Assign / Delete Test
+    
     Route::get('/test/view/{id}', [TestController::class, 'viewTest'])->name('test.view');
     Route::get('/test/assign-modal/{id}', [TestController::class, 'assignModal'])->name('test.assign.modal');
     Route::post('/test/assign', [TestController::class, 'assignTest'])->name('test.assign');
@@ -99,23 +100,10 @@ Route::get('/user/login', function () {
 
 // Handle login
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login.submit');
-
-// USER DASHBOARD - Must be logged in
-Route::middleware('user.auth')->group(function () {
-
-    // Show profile update page
     Route::get('/user/profile', [UserController::class, 'profilePage'])->name('user.profile');
-
-    // Save profile
     Route::post('/user/profile/update', [UserController::class, 'updateProfile'])->name('user.profile.update');
-
-    // Student test start
     Route::get('/student/test/start/{id}', [TestController::class, 'studentStartTest'])
         ->name('student.test.start');
-
-    // Submit answers
     Route::post('/student/test/submit/{id}', [TestController::class, 'studentSubmitTest'])
         ->name('student.test.submit');
-});
-
 

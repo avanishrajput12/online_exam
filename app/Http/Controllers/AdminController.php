@@ -5,6 +5,7 @@ use App\Models\AdminsModel;
 use Illuminate\Http\Request;
 use App\Models\Students;
 use App\Models\Category;
+use App\Models\TestResult;
 
 
 class AdminController extends Controller
@@ -44,4 +45,18 @@ class AdminController extends Controller
         $data=Students::all();
         return view("admin.students",compact('data'));
       }
+
+
+        public function index()
+    {
+        $results = TestResult::with(['test', 'student'])
+                    ->orderBy('id', 'DESC')
+                    ->get();
+
+        return view('admin.results.index', compact('results'));
+    }
+
+
+
+
 }

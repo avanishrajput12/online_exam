@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Test;
+use App\Models\TestResult;
+use App\Models\TestAnswer;
 use App\Models\TestQuestion;
 use App\Models\Questions;
 use App\Models\Students;
@@ -159,6 +161,63 @@ public function studentStartTest($id)
 
     return view('student.student_test', compact('test'));
 }
+
+
+
+
+public function studentSubmitTest(Request $request, $id)
+{
+    $test = Test::with('testQuestions.question')->findOrFail($id);
+
+    $submitted = $request->ans ?? [];
+
+    $score = 0;
+    $total = $test->testQuestions->count();
+
+    // 1️⃣ Create Result Record First
+    $result = TestResult::create([
+        "test_id" => $test->id,
+        "student_id" => session("user_id") ?? 1,  // ensure login
+        "score" => 0, // temporary
+        "total_questions" => $total,
+        "percentage" => 0,
+        "submitted_at" => now()
+    ]);
+
+    // 2️⃣ Save Each Answer
+    foreach ($test->testQuestions as $tq) {
+        $question = $tq->question;
+        $qid = $question->id;
+
+        $correct = $question->correct;
+        $given = $submitted[$qid] ?? null;
+
+        $isCorrect = ($given === $correct) ? 1 : 0;
+
+        if ($isCorrect) {
+            $score++;
+        }
+
+        TestAnswer::create([
+            "result_id" => $result->id,
+            "question_id" => $qid,
+            "given_answer" => $given,
+            "correct_answer" => $correct,
+            "is_correct" => $isCorrect
+        ]);
+    }
+
+    // 3️⃣ Update Final Score & Percentage
+    $result->update([
+        "score" => $score,
+        "percentage" => ($score / $total) * 100
+    ]);
+
+    // 4️⃣ Show Result Page
+   return view("student.thank_you");
+
+}
+
 
 
 
