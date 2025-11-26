@@ -60,4 +60,5 @@ class QuestionController extends Controller
 
         return response()->json(['success' => true]);
     }
+
 }

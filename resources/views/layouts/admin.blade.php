@@ -27,21 +27,13 @@
     <h4 class="text-center text-white mb-4">Admin Panel</h4>
 
     <nav class="nav flex-column">
-
       <a href="{{ url('admin/dashboard') }}" class="nav-link">Dashboard</a>
-
       <a href="{{ url('admin/students') }}" class="nav-link">Students</a>
-
       <a href="{{ url('admin/results') }}" class="nav-link">Results</a>
-
       <a href="{{ url('admin/questions') }}" class="nav-link">Questions</a>
-
       <a href="{{ route('generate.test') }}" class="nav-link">Generate Test</a>
-
       <a href="{{ route('tests.all') }}" class="nav-link">All Tests</a>
-
       <a href="{{ url('admin/settings') }}" class="nav-link">Settings</a>
-
     </nav>
   </div>
 
@@ -63,9 +55,6 @@
 
 
 <script>
-/* -----------------------------------------
-   ⭐ AJAX PAGE LOADER (Reusable)
------------------------------------------ */
 function loadPage(url) {
 
     $("#ajax-content").html(`
@@ -79,7 +68,6 @@ function loadPage(url) {
 
         $("#ajax-content").html(response);
 
-        // ⭐ Execute inline scripts from loaded HTML
         $("#ajax-content").find("script").each(function(){
             let code = $(this).text();
             if(code.trim() !== ""){
@@ -96,10 +84,6 @@ function loadPage(url) {
     });
 }
 
-
-/* -----------------------------------------
-   ⭐ Sidebar Navigation Click
------------------------------------------ */
 $(document).on("click", ".sidebar .nav-link", function(e){
     e.preventDefault();
 
@@ -109,57 +93,18 @@ $(document).on("click", ".sidebar .nav-link", function(e){
     loadPage($(this).attr("href"));
 });
 
-
-/* -----------------------------------------
-   ⭐ Mobile sidebar toggle
------------------------------------------ */
 $("#toggleSidebar").on("click", function(){
     $("#sidebar").toggleClass("active");
 });
 
-
-/* -----------------------------------------
-   ⭐ CSRF Setup for POST/DELETE
------------------------------------------ */
 $.ajaxSetup({
     headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") }
 });
 </script>
 
-
-
-<!-- ========================================================= -->
-<!-- ⭐⭐ ALL TESTS — Button Click HANDLERS ⭐⭐ -->
-<!-- ========================================================= -->
-
+<!-- Delete Test (Only Tests) -->
 <script>
-
-/* ---------------------------------------
-   VIEW Test
---------------------------------------- */
-$(document).on("click", ".btn-view", function () {
-    let id = $(this).data("id");
-    loadPage("/admin/test/view/" + id);
-});
-
-
-/* ---------------------------------------
-   ASSIGN Test
---------------------------------------- */
-$(document).on("click", ".btn-assign", function () {
-    let id = $(this).data("id");
-
-    $.get("/admin/test/assign-modal/" + id, function (modalHtml) {
-        $("body").append(modalHtml);
-        $("#assignTestModal").modal("show");
-    });
-});
-
-
-/* ---------------------------------------
-   DELETE Test
---------------------------------------- */
-$(document).on("click", ".btn-delete", function () {
+$(document).on("click", ".btn-test-delete", function () {
 
     if (!confirm("Are you sure?")) return;
 
@@ -174,8 +119,59 @@ $(document).on("click", ".btn-delete", function () {
         }
     });
 });
-
 </script>
+
+
+<!-- ⭐ MOVE CATEGORY MODALS HERE -->
+<!-- ADD / EDIT CATEGORY MODAL -->
+<div class="modal fade" id="categoryModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form id="categoryForm">
+        @csrf
+        <div class="modal-header">
+          <h5 class="modal-title" id="categoryModalTitle">Add Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="category_id" id="category_id">
+          <div class="mb-3">
+            <label class="form-label">Category Title</label>
+            <input type="text" name="title" id="category_title" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CATEGORY CONFIRM -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p>Are you sure?</p>
+        <input type="hidden" id="delete_cat_id">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger btn-sm" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⭐ QUESTIONS JS -->
+<script src="/js/questions.js"></script>
 
 </body>
 </html>

@@ -19,7 +19,7 @@
             Results will be reviewed by the admin.
         </p>
 
-        <a href="/user/profile" class="btn btn-primary mt-4">
+        <a href="#" class="btn btn-primary mt-4">
             Go to Dashboard
         </a>
     </div>
